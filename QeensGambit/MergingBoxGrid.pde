@@ -1,53 +1,52 @@
 class MergingBoxGrid {
-
-  PVector[] initPosition = new PVector[49];
-  float[] seperatedRotation = new float[49];
-  float[] seperatedScale = new float[49];
-  float[] deltaRotation = new float[49];
-  float[] deltaScale = new float[49];
+  int gridSize;
+  PVector[] initPosition = new PVector[gridSize*gridSize];
+  float[] targetRotation = new float[gridSize*gridSize];
+  float[] targetScale = new float[gridSize*gridSize];
   int initGridGap, initBoxSize;
   float gridGap, boxSize;
   float deltaGap;
   int maxTick, tick;
 
-  MergingBoxGrid(int size, int gap) {
+  MergingBoxGrid(int size, int gap, int grid_count) {
     initGridGap = gap;
     initBoxSize = size;
+    gridSize = grid_count;
+
+    initPosition = new PVector[gridSize*gridSize];
+    targetRotation = new float[gridSize*gridSize];
+    targetScale = new float[gridSize*gridSize];
 
     init();
   }
 
   void init() {
+
     gridGap = initBoxSize + initGridGap;
     boxSize = initBoxSize;
     maxTick = 190;
     tick = maxTick;
-    deltaGap = (gridGap - initGridGap) / float(maxTick);
+    deltaGap = (initGridGap) / float(maxTick);
 
     int index = 0;
-    for (int x=-3; x<=3; x++) {
-      for (int y=-3; y<=3; y++) {
-        initPosition[index] = new PVector(x*gridGap, y*gridGap);
+    for (int x=-floor(gridSize/2); x<=floor(gridSize/2); x++) {
+      for (int y=-floor(gridSize/2); y<=floor(gridSize/2); y++) {
+        initPosition[index] = new PVector(x*(boxSize+gridGap), y*(boxSize+gridGap));
         index ++;
       }
     }
-    for (int i=0; i<49; i++) {
-      seperatedRotation[i] = random(-PI/4, PI/4);
-      seperatedScale[i] = random(0.3, 0.7);
-      deltaRotation[i] = seperatedRotation[i] / maxTick;
-      deltaScale[i] = (1 - seperatedScale[i]) / maxTick;
+    for (int i=0; i<gridSize*gridSize; i++) {
+      targetRotation[i] = random(-PI/4, PI/4);
+      targetScale[i] = random(0.3, 0.5);
     }
   }
 
   void update() {
-    //println(gridGap);
     if (tick > 0) {
       gridGap -= deltaGap;
-      for (int i=0; i<49; i++) {
-        //seperatedRotation[i] -= deltaRotation[i];
-        //seperatedScale[i] += deltaScale[i];
-        seperatedRotation[i] = lerp(seperatedRotation[i], 0, 0.025);
-        seperatedScale[i] = lerp(seperatedScale[i], 1.01, 0.025);
+      for (int i=0; i<gridSize*gridSize; i++) {
+        targetRotation[i] = lerp(targetRotation[i], 0, 0.025);
+        targetScale[i] = lerp(targetScale[i], 1.01, 0.025);
       }
     } else {
       //init();
@@ -62,13 +61,13 @@ class MergingBoxGrid {
     fill(0);
     pushMatrix();
     int index = 0;
-    for (int x=-3; x<=3; x++) {
-      for (int y=-3; y<=3; y++) {
+    for (int x=-floor(gridSize/2); x<=floor(gridSize/2); x++) {
+      for (int y=-floor(gridSize/2); y<=floor(gridSize/2); y++) {
         pushMatrix();
         translate(x*gridGap, y*gridGap);
         if (x!=0 || y!=0) {
-          rotate(seperatedRotation[index]);
-          scale(seperatedScale[index]);
+          rotate(targetRotation[index]);
+          scale(targetScale[index]);
         }
         rect(0, 0, boxSize, boxSize);
         popMatrix();
