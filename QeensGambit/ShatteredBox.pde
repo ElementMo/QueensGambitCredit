@@ -15,6 +15,7 @@ class ShatteredBox {
     boxInitScale = scale;
     boxScale = boxInitScale;
     // Exponential Scale
+    // Reference: https://creativecow.net/forums/thread/how-can-i-manually-replicate-the-exponential-scale/
     k = log(3.0/1.0) / 240.0; // t = time - t1; T = t2-t1; k=Math.log(v2/v1) / T; scale = v1*Math.exp(k*t);
     init();
   }
