@@ -1,2 +1,2 @@
 # QueensGambitCredit
-The end credit of the Queen's Gambit end credit
+The end credit of the Netflix show Queen's Gambit

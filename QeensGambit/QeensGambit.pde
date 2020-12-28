@@ -6,11 +6,16 @@ ShatteredBox sbox;
 MergingBoxGrid mgrid;
 ShrinkBoxGrid sgrid;
 CubeGrid cgrid;
+RippleDots rdots;
+WiggleBox wbox;
+AdjacentBox abox;
 
 void setup() {
   size(1280, 720, P3D);
   noStroke();
   rectMode(CENTER);
+  background(0);
+
   cam = new PeasyCam(this, 400);
   float cameraZ = ((height/2.0) / tan(PI*60.0/360.0));
   perspective(PI/3.0, float(width)/float(height), cameraZ/100.0, cameraZ*10.0);
@@ -27,7 +32,10 @@ void setup() {
   sbox = new ShatteredBox(80);
   mgrid = new MergingBoxGrid(50, 30, 7);
   sgrid = new ShrinkBoxGrid(50, 0, 9);
-  cgrid = new CubeGrid(4, 50, 11);
+  cgrid = new CubeGrid(4, 50, 15);
+  rdots = new RippleDots(10, 500);
+  wbox = new WiggleBox();
+  abox = new AdjacentBox();
 }
 
 void mousePressed() {
@@ -39,14 +47,29 @@ void keyPressed() {
 }
 
 void draw() {
-  background(0);
-
-  cgrid.draw();
-  radialBlurGlobal.set("mouse", float(width/4), float(height/3));
-  radialBlurGlobal.set("NUM_SAMPLES", 99);
-  radialBlurGlobal.set("rayLength", 0.14);
-  radialBlurGlobal.set("intensity", 0.30);
+  
+  abox.draw();
+  radialBlurGlobal.set("mouse", float(width/2), float(height/2));
+  radialBlurGlobal.set("NUM_SAMPLES", 203);
+  radialBlurGlobal.set("rayLength", 0.16);
+  radialBlurGlobal.set("intensity", 0.47);
   filter(radialBlurGlobal);
+  
+  //wbox.draw();
+
+  //rdots.draw();
+  //radialBlurGlobal.set("mouse", float(width/4), float(height/2));
+  //radialBlurGlobal.set("NUM_SAMPLES", 99);
+  //radialBlurGlobal.set("rayLength", 0.12);
+  //radialBlurGlobal.set("intensity", 0.12);
+  //filter(radialBlurGlobal);
+
+  //cgrid.draw();
+  //radialBlurGlobal.set("mouse", float(width/4), float(height/3));
+  //radialBlurGlobal.set("NUM_SAMPLES", 99);
+  //radialBlurGlobal.set("rayLength", 0.14);
+  //radialBlurGlobal.set("intensity", 0.30);
+  //filter(radialBlurGlobal);
 
   //sgrid.draw();
   //radialBlurGlobal.set("mouse", float(width/2), float(height/2));
